@@ -27,6 +27,30 @@ router.get("/:id", isAuthenticated, async (req,res,next) => {
 })
 
 
+//? GET "/api/libros/localizacion/:localizacion" => Muestra los libros por localizacion
+router.get("/localizacion/:localizacion", isAuthenticated, async (req,res,next) => {
+
+    const { localizacion } = req.params;
+    const idUsuario = req.payload._id;
+
+    try {
+
+        const foundLibro = await LibroModel.find({ localizacion, usuario: idUsuario });
+
+        if (foundLibro === null) {
+            res.status(404).json( { errorMessage: "Libro no encontrado" } );
+            return;
+        }
+
+        res.json(foundLibro);
+        
+    } catch (error) {
+        next(error);
+    }
+})
+
+
+
 //? PATCH "/api/libros/:id" => Edita los detalles del libro
 router.patch("/:id", isAuthenticated, async (req,res,next) => {
 
@@ -39,7 +63,6 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
         res.status(400).json({ errorMessage: "Los campos no están completos" });
         return;
     }
-
 
     try {
 
@@ -78,7 +101,6 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     const idUsuario = req.payload._id;
 
-
     try {
         const foundLibro = await LibroModel.findById(id);
 
@@ -94,8 +116,6 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
-
 
 })
 

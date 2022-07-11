@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const isAuthenticated = require("../middleware/isAuthenticated");
 const UbicacionModel = require("../models/Localizacion.model");
+const LibroModel = require("../models/Libro.model");
 
 
 // rutas de localizaciones
@@ -109,11 +110,11 @@ router.get("/:id", isAuthenticated, async (req,res,next) => {
 router.patch("/:id", isAuthenticated, async (req,res,next) => {
 
     const { id } = req.params;
-    const { nombre } = req.body;
+    const { lugar } = req.body;
 
     const idUsuario = req.payload._id;
 
-    if (!nombre) {
+    if (!lugar) {
         res.status(400).json({ errorMessage: "Los campos no están completos" });
         return;
     }
@@ -127,7 +128,7 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
             return;
         } else {
             const updateUbicacion = await UbicacionModel.findByIdAndUpdate(id, {
-                nombre
+                lugar
             }, {new: true} );
     
             res.json(updateUbicacion);    
@@ -147,14 +148,21 @@ router.delete("/:id", isAuthenticated, async (req,res,next) => {
     const idUsuario = req.payload._id;
 
     try {
-        const foundUbicacion = await UbicacionModel.findById(id);
-        if (idUsuario != foundUbicacion.usuario) {
-            res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización" });
-            return;
-        } else {
-            await UbicacionModel.findByIdAndDelete(id);
-            res.json("Localización borrada");
+        const foundLibros = await LibroModel.find( {localizacion: id} );
+
+        if (foundLibros.length === 0) {
+            const foundLocalizacion = await UbicacionModel.findById(id);
+            if (idUsuario != foundLocalizacion.usuario) {
+                res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización" });
+                return;
+            } else {
+                await UbicacionModel.findByIdAndDelete(id);
+                res.json("Localización borrada");
+            }
+    } else {
+            res.json( { errorMessage: "Existen libros con esta localización, no es posible borrarla" } );
         }
+
         
     } catch (error) {
         next(error);
