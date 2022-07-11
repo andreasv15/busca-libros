@@ -98,7 +98,7 @@ router.post("/login", async (req, res, next) => {
 //? GET "/api/auth/verify" => va a verificar si un token es valido o no, la ruta se usa para el flujo de Front end
 router.get("/verify", isAuthenticated, (req,res,next) => {
     // 1. Checkeamos que el token es valido
-    //console.log("payload: ", req.payload); // similar al req.session.user
+    // console.log("payload: ", req.payload); // similar al req.session.user
     // console.log("Pasando por la ruta, todo bien con el middleware");
 
     // 2. Enviar al front end la info del usuario del token

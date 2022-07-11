@@ -12,8 +12,11 @@ router.use("/auth", authRoutes);
 const librosRoutes = require("./libro.routes.js");
 router.use("/libros", librosRoutes);
 
-const ubicacionesRoutes = require("./ubicacion.routes.js");
-router.use("/ubicacion", ubicacionesRoutes);
+const localizacionesRoutes = require("./localizacion.routes.js");
+router.use("/localizaciones", localizacionesRoutes);
+
+const uploaderRoutes = require("./uploader.routes");
+router.use("/uploader", uploaderRoutes);
 
 
 module.exports = router;

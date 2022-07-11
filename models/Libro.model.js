@@ -5,27 +5,34 @@ const libroSchema = new Schema(
   {
     imagen: {
         type: String,
-        default: "https://elplacerdelalectura.com/wp-content/uploads/2020/10/libro-vacio-abierto-espacio-madera-espacio-texto_185193-1785.jpg"
+        default: "https://res.cloudinary.com/dmrjy3ynh/image/upload/v1657049201/busca-libros/book.jpg"
     },
     titulo: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     autor: {
       type: String,
       required: true,
     },
-    editorial: {
+    sinopsis: {
       type: String,
       required: true
     },
+    // categoria: [{
+    //   type: String
+    // }],
     usuario: {
         type: Schema.Types.ObjectId,
         ref: "user",
         required: true
     },
+    localizacion: {
+      type: Schema.Types.ObjectId,
+      ref: "localizacion",
+      required: true
     }
+  }
 );
 
 const Libro = model("libro", libroSchema);
