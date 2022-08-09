@@ -18,7 +18,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
             const listaUbicaciones = await UbicacionModel.find( {usuario: idUsuario} );
           
             if (listaUbicaciones.length === 0) {
-                res.json( { errorMessage: "No hay localizaciones" } );
+                // res.json( { errorMessage: "No hay localizaciones." } );
                 return;
             }
         
@@ -42,7 +42,7 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
     
     // if (!lugar || !habitacion || !casa || !ciudad) {
     if (!lugar) {
-        res.status(400).json({ errorMessage: "Los campos no están completos" });
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
         return;
     }
 
@@ -52,7 +52,7 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
         const foundUbicacion = await UbicacionModel.findOne( {lugar} )
 
         if (foundUbicacion !== null) {
-            res.status(400).json( {errorMessage: "Ya existe otra localización con los mismos valores"} )
+            res.status(400).json( {errorMessage: "Ya existe otra localización con los mismos valores."} )
             return;
         }
 
@@ -64,7 +64,7 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
             usuario: idUsuario
         })
 
-        res.json("Todo bien, localización creada");
+        res.json("Todo bien, localización creada.");
 
     } catch (error) {
         next(error)
@@ -90,10 +90,10 @@ router.get("/:id", isAuthenticated, async (req,res,next) => {
 
         const foundUbicacion = await UbicacionModel.findById(id);
         if (foundUbicacion === null) {
-            res.status(404).json( { errorMessage: "Localización no encontrada" } );
+            res.status(404).json( { errorMessage: "Localización no encontrada." } );
         } else {
             if (idUsuario != foundUbicacion.usuario) {
-                res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización" });
+                res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización." });
                 return;
             } else {
                 res.json(foundUbicacion);
@@ -115,7 +115,7 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
     const idUsuario = req.payload._id;
 
     if (!lugar) {
-        res.status(400).json({ errorMessage: "Los campos no están completos" });
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
         return;
     }
 
@@ -124,7 +124,7 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
 
         const foundUbicacion = await UbicacionModel.findById(id);
         if (idUsuario != foundUbicacion.usuario) {
-            res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización" });
+            res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización." });
             return;
         } else {
             const updateUbicacion = await UbicacionModel.findByIdAndUpdate(id, {
@@ -153,14 +153,14 @@ router.delete("/:id", isAuthenticated, async (req,res,next) => {
         if (foundLibros.length === 0) {
             const foundLocalizacion = await UbicacionModel.findById(id);
             if (idUsuario != foundLocalizacion.usuario) {
-                res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización" });
+                res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización." });
                 return;
             } else {
                 await UbicacionModel.findByIdAndDelete(id);
                 res.json("Localización borrada");
             }
     } else {
-            res.json( { errorMessage: "Existen libros con esta localización, no es posible borrarla" } );
+            res.json( { errorMessage: "Existen libros con esta localización, no es posible borrarla." } );
         }
 
         

@@ -7,7 +7,6 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 
 
 // rutas de auth
-
 //? POST "/api/auth/signup" => registro del usuario
 router.post("/signup", async (req,res,next) => {
 
@@ -15,7 +14,7 @@ router.post("/signup", async (req,res,next) => {
 
     //! VALIDACIONES DE BACKEND
     if (!nombre || !username || !password) {
-        res.status(400).json({ errorMessage: "Los campos no están completos" });
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
         return;
     }
 
@@ -24,7 +23,7 @@ router.post("/signup", async (req,res,next) => {
         const foundUserUsername = await UserModel.findOne({ username });
 
         if (foundUserUsername !== null) {
-            res.status(400).json({ errorMessage: "El nombre de usuario ya está registrado" });
+            res.status(400).json({ errorMessage: "El nombre de usuario ya está registrado." });
             return;
         }
 
@@ -37,7 +36,7 @@ router.post("/signup", async (req,res,next) => {
             password: hashPassowrd,            
         })
 
-        res.json("Todo bien, usuario creado");
+        res.json("Todo bien, usuario creado.");
         
     } catch (error) {
         next(error)
@@ -50,11 +49,16 @@ router.post("/login", async (req, res, next) => {
 
     const { username, password } = req.body;
 
+    if (!username || !password) {
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
+        return;
+    }
+
     try {
         const foundUser = await UserModel.findOne({ username });         
 
         if (foundUser === null) {
-            res.status(400).json({ errorMessage: "El usuario introducido no está registrado" });
+            res.status(400).json({ errorMessage: "El usuario introducido no está registrado." });
             return;
         }
 
@@ -64,7 +68,7 @@ router.post("/login", async (req, res, next) => {
         // console.log("pass: ", checkPassword); // devuelve true o false 
 
         if (checkPassword === false) {
-            res.status(401).json({ errorMessage: "La contraseña no es correcta" }); // status 401 --> sin autorizacion
+            res.status(401).json({ errorMessage: "La contraseña no es correcta." }); // status 401 --> sin autorizacion
             return;
         }
 

@@ -60,7 +60,7 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
     const idUsuario = req.payload._id;
 
     if (!imagen || !titulo || !autor || !sinopsis || !localizacion) {
-        res.status(400).json({ errorMessage: "Los campos no están completos" });
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
         return;
     }
 
@@ -105,11 +105,11 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
         const foundLibro = await LibroModel.findById(id);
 
         if (idUsuario != foundLibro.usuario) {
-            res.status(400).json({ errorMessage: "Este usuario no es propietario de este libro" });
+            res.status(400).json({ errorMessage: "Este usuario no es propietario de este libro." });
             return;
         } else {
             await LibroModel.findByIdAndDelete(id);
-            res.json("Libro eliminado");
+            res.json("Libro eliminado.");
         }
 
         
@@ -126,7 +126,7 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
     const idUsuario = req.payload._id;
 
     if (!titulo || !autor || !sinopsis || !localizacion) {
-        res.status(400).json({ errorMessage: "Los campos no están completos" });
+        res.status(400).json({ errorMessage: "Los campos no están completos." });
         return;
     }
 
@@ -172,7 +172,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
         //console.log("length: ", listaLibros.length)
         
         if (listaLibros.length === 0) {
-            res.json( { errorMessage: "No tienes libros" } )
+            res.json( { errorMessage: "No tienes libros." } )
             return;
         }
 
