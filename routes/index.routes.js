@@ -18,5 +18,7 @@ router.use("/localizaciones", localizacionesRoutes);
 const uploaderRoutes = require("./uploader.routes");
 router.use("/uploader", uploaderRoutes);
 
+const profileRoutes = require("./profile.routes");
+router.use("/perfil", profileRoutes);
 
 module.exports = router;

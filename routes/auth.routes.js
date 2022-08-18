@@ -18,6 +18,16 @@ router.post("/signup", async (req,res,next) => {
         return;
     }
 
+    if (username.length < 4 || nombre.length < 4 ) {
+        res.status(400).json({ errorMessage: "Los campos username y nombre requieren más de 4 caracteres." });
+        return;
+    }
+
+    if (password.length < 7 ) {
+        res.status(400).json({ errorMessage: "La contraseña requieren 8 caracteres como mínimo." });
+        return;
+    }
+
     try {
         //* busca si hay algun usuario con el username pasado por parametro
         const foundUserUsername = await UserModel.findOne({ username });
@@ -56,7 +66,7 @@ router.post("/login", async (req, res, next) => {
 
     try {
         const foundUser = await UserModel.findOne({ username });         
-
+        
         if (foundUser === null) {
             res.status(400).json({ errorMessage: "El usuario introducido no está registrado." });
             return;
@@ -76,9 +86,7 @@ router.post("/login", async (req, res, next) => {
         const payload = {
             _id: foundUser._id,
             nombre: foundUser.nombre,
-            email: foundUser.email,
-            username: foundUser.username,
-            isAdmin: foundUser.isAdmin
+            username: foundUser.username
         }
 
         const authToken = jwt.sign(
@@ -97,6 +105,8 @@ router.post("/login", async (req, res, next) => {
         next(error);
     }
 })
+
+
 
 
 //? GET "/api/auth/verify" => va a verificar si un token es valido o no, la ruta se usa para el flujo de Front end

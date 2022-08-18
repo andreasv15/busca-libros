@@ -4,7 +4,7 @@ const LibroModel = require("../models/Libro.model");
 
 // rutas de libros
 
-//? GET "/api/libros/:id" => Muestra los detalles del libro
+//? GET "/api/libros/:id" => Muestra los detalles de un libro
 router.get("/:id", isAuthenticated, async (req,res,next) => {
 
     const { id } = req.params;
@@ -13,7 +13,7 @@ router.get("/:id", isAuthenticated, async (req,res,next) => {
     try {
 
         const foundLibro = await LibroModel.findOne({ _id: id, usuario: idUsuario });
-
+        // console.log("f libro: ", foundLibro);
         if (foundLibro === null) {
             res.status(404).json( { errorMessage: "Libro no encontrado" } );
             return;
@@ -55,7 +55,7 @@ router.get("/localizacion/:localizacion", isAuthenticated, async (req,res,next) 
 router.patch("/:id", isAuthenticated, async (req,res,next) => {
 
     const { id } = req.params;
-    const { imagen, titulo, autor, sinopsis, localizacion } = req.body;
+    const { imagen, titulo, autor, sinopsis, localizacion, leido, esFavorito } = req.body;
 
     const idUsuario = req.payload._id;
 
@@ -70,7 +70,6 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
         // console.log("idUsuario: ", idUsuario);
         // console.log("foundLibro: ", foundLibro.usuario);
         // console.log("es igual: ", idUsuario == foundLibro.usuario);
-        // console.log("es igual: ", idUsuario == foundLibro.usuario);
 
         //* Comprobamos que el usuario que edita el libro es el propietario
         if (idUsuario != foundLibro.usuario) {
@@ -82,9 +81,10 @@ router.patch("/:id", isAuthenticated, async (req,res,next) => {
                 titulo,
                 autor,
                 sinopsis,
-                localizacion
+                localizacion,
+                leido,
+                esFavorito
             }, {new: true} );
-
             res.json(updateLibro);
         }
 
@@ -104,6 +104,7 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
     try {
         const foundLibro = await LibroModel.findById(id);
 
+                //* Comprobamos que el usuario que borra el libro es el propietario
         if (idUsuario != foundLibro.usuario) {
             res.status(400).json({ errorMessage: "Este usuario no es propietario de este libro." });
             return;
@@ -122,7 +123,7 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
 //? POST "/api/libros/anadir" => Agrega un libro
 router.post("/anadir", isAuthenticated, async (req, res, next) => {
 
-    const { imagen, titulo, autor, sinopsis, localizacion } = req.body;
+    const { imagen, titulo, autor, sinopsis, localizacion, leido, esFavorito } = req.body;
     const idUsuario = req.payload._id;
 
     if (!titulo || !autor || !sinopsis || !localizacion) {
@@ -145,7 +146,9 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
             autor,
             sinopsis,
             usuario: idUsuario,
-            localizacion
+            localizacion,
+            leido,
+            esFavorito
         })
 
         res.json("Todo bien, libro añadido")

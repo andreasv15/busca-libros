@@ -5,7 +5,7 @@ const libroSchema = new Schema(
   {
     imagen: {
         type: String,
-        default: "https://res.cloudinary.com/dmrjy3ynh/image/upload/v1657049201/busca-libros/book.jpg"
+        default: "https://res.cloudinary.com/dmrjy3ynh/image/upload/v1660327249/busca-libros/one-book_bmi8rh.jpg"
     },
     titulo: {
       type: String,
@@ -19,7 +19,7 @@ const libroSchema = new Schema(
       type: String,
       required: true
     },
-    // categoria: [{
+    // catengoria: [{
     //   type: String
     // }],
     usuario: {
@@ -31,7 +31,14 @@ const libroSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "localizacion",
       required: true
+    },
+    leido: {
+      type: Boolean
+    },
+    esFavorito: {
+      type: Boolean
     }
+
   }
 );
 
