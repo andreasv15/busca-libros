@@ -11,7 +11,7 @@ router.get("/", isAuthenticated, async (req,res,next) => {
     // console.log("req.pay ", req.payload);
 
     const idUsuario = req.payload._id;
-    console.log(idUsuario)
+    //console.log(idUsuario)
     // console.log("idusu ", idUsuario);
 
     try {
