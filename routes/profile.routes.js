@@ -5,16 +5,17 @@ const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middleware/isAuthenticated");
 const { response } = require("express");
 
-//? GET "/api/profile/" => datos del usuario logueado
+//? GET "/api/profile" => datos del usuario logueado
 router.get("/", isAuthenticated, async (req,res,next) => {
 
     // console.log("req.pay ", req.payload);
 
     const idUsuario = req.payload._id;
+    console.log(idUsuario)
     // console.log("idusu ", idUsuario);
 
     try {
-        const foundUser = await UserModel.findOne({ idUsuario });
+        const foundUser = await UserModel.findOne({ _id: idUsuario });
         res.json(foundUser);
         
     } catch (error) {
