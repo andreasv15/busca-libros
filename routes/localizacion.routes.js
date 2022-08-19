@@ -72,6 +72,9 @@ router.post("/anadir", isAuthenticated, async (req, res, next) => {
 
 })
 
+//? GET "/api/localizaciones/:id/" => Muestra detalles de la ubicacion
+
+
 //? GET "/api/localizaciones/:id" => Muestra detalles de la ubicacion
 router.get("/:id", isAuthenticated, async (req,res,next) => {
     const { id } = req.params;
@@ -96,7 +99,19 @@ router.get("/:id", isAuthenticated, async (req,res,next) => {
                 res.status(400).json({ errorMessage: "Este usuario no es propietario de esta localización." });
                 return;
             } else {
-                res.json(foundUbicacion);
+                const foundLibros = await LibroModel.find({ localizacion: id})
+                if (foundLibros === null) {
+                    res.status(400).json({ errorMessage: "Esta localización no tiene libros." });
+                    return;     
+                } else {
+                    res.json({
+                        localizacion: foundUbicacion,
+                        libros: foundLibros
+                    });
+
+                }
+                //res.json(foundUbicacion);
+
             }    
         }
         
@@ -159,7 +174,7 @@ router.delete("/:id", isAuthenticated, async (req,res,next) => {
                 await UbicacionModel.findByIdAndDelete(id);
                 res.json("Localización borrada");
             }
-    } else {
+        } else {
             res.json( { errorMessage: "Existen libros con esta localización, no es posible borrarla." } );
         }
 
