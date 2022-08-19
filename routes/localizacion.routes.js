@@ -18,7 +18,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
             const listaUbicaciones = await UbicacionModel.find( {usuario: idUsuario} );
           
             if (listaUbicaciones.length === 0) {
-                // res.json( { errorMessage: "No hay localizaciones." } );
+                res.json( { errorMessage: "No hay localizaciones." } );
                 return;
             }
         
